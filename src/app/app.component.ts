@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, Subject } from 'rxjs';
@@ -11,12 +12,17 @@ export class AppComponent {
   title = 'easyShopper';
   trigger$: Subject<void> = new Subject<void>();
   imagePath!: SafeResourceUrl;
-  constructor(private _sanitizer: DomSanitizer) {}
+  detection: any;
+  constructor(private _sanitizer: DomSanitizer, private http: HttpClient) {}
 
   saveImage(img: any) {
-    this.imagePath = this._sanitizer.bypassSecurityTrustResourceUrl(
-      img._imageAsDataUrl
-    );
+    const imgBase64 = img._imageAsDataUrl.split(',')[1];
+
+    this.http
+      .post('http://127.0.0.1:5000/', { data: imgBase64 })
+      .subscribe((detection) => {
+        this.detection = detection;
+      });
   }
 
   captureImg() {
