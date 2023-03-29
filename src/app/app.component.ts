@@ -19,7 +19,7 @@ export class AppComponent {
     const imgBase64 = img._imageAsDataUrl.split(',')[1];
 
     this.http
-      .post('https://qrisno.pythonanywhere.com/', { data: imgBase64 })
+      .post('http://127.0.0.1:5000/', { data: imgBase64 })
       .subscribe((detection) => {
         this.detection = detection;
       });
