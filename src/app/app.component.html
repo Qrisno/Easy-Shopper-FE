@@ -2,11 +2,16 @@
   <img src="./assets/picture.jfif" />
   EasyShopper
 </header>
+<ng-container *ngIf="!detection?.detections">
+  <webcam [trigger]="trigger$" (imageCapture)="saveImage($event)"></webcam>
+  <button (click)="captureImg()">Capture</button>
+</ng-container>
 
-<webcam [trigger]="trigger$" (imageCapture)="saveImage($event)"></webcam>
-<button (click)="captureImg()">Capture</button>
-
-<p *ngIf="detection?.detections">
-  Detected a {{ detection.detections.labels[0].Label }} with precision
-  {{ detection.detections.labels[0].confidence * 100 }}%
-</p>
+<div *ngIf="detection?.detections">
+  Detected a {{ detection.detections.labels[0].Label }}
+  <p>Price per kg :{{ prices[detection.detections.labels[0].Label] }} USD</p>
+  Total KG:
+  <input [(ngModel)]="weight" />
+  <p>Price: {{ prices[detection.detections.labels[0].Label] * weight || 0 }}</p>
+  <button (click)="detection = null">Go Back</button>
+</div>
